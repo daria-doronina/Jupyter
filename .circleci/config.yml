@@ -25,14 +25,14 @@ jobs: # a collection of steps
             echo "{"username":\"${KAGGLE_USERNAME}\","key":\"${KAGGLE_KEY}\}" > kaggle.json
             mkdir .kaggle
             mv kaggle.json .kaggle
-            kaggle competitions download titanic
-            jupyter-nbconvert --execute titanic-mirosh.ipynb
+            kaggle competitions download Jupyter
+            jupyter-nbconvert --execute Задание1.ipynb
             mkdir -p task
-            mv titanic-mirosh.html task
-            mv titanic.csv task
-            kaggle competitions submit titanic -f task/titanic.csv -m "My submission messsage"
+            mv Задание1.html task
+            mv prac.csv task
+            kaggle competitions submit titanic -f task/prac.csv -m "My submission messsage"
             export OSF_PASSWORD
-          #  osf -p x783r upload task/titanic-mirosh.html osfstorage/Miroshnichenko/titanic.html
+          
             
             
           paths:
