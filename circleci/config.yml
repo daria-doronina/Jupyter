@@ -1,0 +1,43 @@
+version: 2
+jobs: # a collection of steps
+  build: # runs not using Workflows must have a `build` job as entry point
+    working_directory: ~/first_repository # directory where steps will run
+    docker: # run the steps with Docker
+      - image: circleci/python:3.6.6 # ...with this image as the primary container; this is where all `steps` will run
+    steps:
+      # a collection of executable commands
+      - checkout # special step to check out source code to the working directory
+      - run: # install and activate virtual environment with pip
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+            
+       
+      
+      - run:
+          name: kaggle & OSF
+          command: |
+            . venv/bin/activate
+            export KAGGLE_KEY
+            export KAGGLE_USERNAME
+            echo "{"username":\"${KAGGLE_USERNAME}\","key":\"${KAGGLE_KEY}\}" > kaggle.json
+            mkdir .kaggle
+            mv kaggle.json .kaggle
+            kaggle competitions download titanic
+            jupyter-nbconvert --execute titanic-mirosh.ipynb
+            mkdir -p task
+            mv titanic-mirosh.html task
+            mv titanic.csv task
+            kaggle competitions submit titanic -f task/titanic.csv -m "My submission messsage"
+            export OSF_PASSWORD
+          #  osf -p x783r upload task/titanic-mirosh.html osfstorage/Miroshnichenko/titanic.html
+            
+            
+          paths:
+            - "venv"
+      
+      - store_artifacts: # special step to store test reports as artifacts
+          path: task
+          destination: task
