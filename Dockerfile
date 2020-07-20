@@ -1,4 +1,4 @@
-FROM circleci/python:3.8
+FROM circleci/python:3.6.4
 ADD . ./
 RUN sudo pip install -r requirements.txt
-RUN sudo jupyter-nbconvert --execute Задание1.ipynb
+RUN sudo jupyter-nbconvert --execute ./Задание1.ipynb
